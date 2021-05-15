@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
+=======
+import React, { useState, useEffect } from 'react';
+>>>>>>> DevOps/main
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -37,6 +41,7 @@ const styles = {
   },
 };
 
+<<<<<<< HEAD
 export default function CarProfile(props) {
   const [car, setCar] = useState({ idCar: 0 });
   const selectedCarId = props.match.params.id;
@@ -47,6 +52,22 @@ export default function CarProfile(props) {
   console.log("tu");
   const handleChange = (event) => {
     console.log("tu");
+=======
+
+
+export default function CarProfile(props) {
+
+
+  const [car, setCar] = useState({ idCar: 0 });
+
+
+
+  const useStyles = makeStyles(styles);
+  const classes = useStyles();
+  console.log("tu")
+  const handleChange = (event) => {
+    console.log("tu")
+>>>>>>> DevOps/main
     const name = event.target.id;
     setCar({
       ...car,
@@ -54,7 +75,13 @@ export default function CarProfile(props) {
     });
   };
 
+<<<<<<< HEAD
   async function SendData() {
+=======
+
+  async function SendData() {
+
+>>>>>>> DevOps/main
     car.idCar = parseInt(car.idCar);
     car.yofProd = parseInt(car.yofProd);
     car.kilometers = parseInt(car.kilometers);
@@ -63,6 +90,7 @@ export default function CarProfile(props) {
     car.segment = parseInt(car.segment);
     car.insurance = new Date(car.insurance);
     car.techRev = new Date(car.techRev);
+<<<<<<< HEAD
     console.log(car);
 
     if (car.idCar != 0) {
@@ -86,6 +114,12 @@ export default function CarProfile(props) {
 
     fetchData();
   }, []);
+=======
+
+    await api.request(API_TYPES.CAR).create(car);
+
+  }
+>>>>>>> DevOps/main
 
   return (
     <div>
@@ -98,10 +132,44 @@ export default function CarProfile(props) {
             </CardHeader>
             <CardBody>
               <GridContainer>
+<<<<<<< HEAD
+=======
+
+>>>>>>> DevOps/main
+                <GridItem xs={12} sm={12} md={4}>
+                  {/* <CustomInput
+                    labelText="Car Id"
+                    id="idCar"
+                    name="idCar"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+<<<<<<< HEAD
+                    
+                    required
+                    hidden
+                    inputProps={{
+                      onChange: handleChange,
+                      type: "number",
+                      value: car.idCar
+                      
+                    }}
+                  /> */}
+=======
+                    required
+                    inputProps={{
+                      onChange: handleChange,
+                      type: "number"
+                    }}
+                  />
+
+>>>>>>> DevOps/main
+                </GridItem>
+
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Manufacturer"
-                    id="manufacturer"
+                    id="manufacturer" 
                     formControlProps={{
                       fullWidth: true,
                     }}
@@ -112,6 +180,10 @@ export default function CarProfile(props) {
                     inputProps={{
                       onChange: handleChange,
                       value: car.manufacturer,
+                    }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
                     }}
                   />
                 </GridItem>
@@ -131,6 +203,10 @@ export default function CarProfile(props) {
                       onChange: handleChange,
                       value: car.model,
                     }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
+                    }}
                   />
                 </GridItem>
 
@@ -148,6 +224,10 @@ export default function CarProfile(props) {
                     inputProps={{
                       onChange: handleChange,
                       value: car.color,
+                    }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
                     }}
                   />
                 </GridItem>
@@ -167,6 +247,10 @@ export default function CarProfile(props) {
                       onChange: handleChange,
                       value: car.yofProd,
                     }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
+                    }}
                   />
                 </GridItem>
 
@@ -184,6 +268,10 @@ export default function CarProfile(props) {
                     inputProps={{
                       onChange: handleChange,
                       value: car.kilometers,
+                    }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
                     }}
                   />
                 </GridItem>
@@ -203,6 +291,10 @@ export default function CarProfile(props) {
                       onChange: handleChange,
                       value: car.priceDay,
                     }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
+                    }}
                   />
                 </GridItem>
 
@@ -221,9 +313,17 @@ export default function CarProfile(props) {
                       onChange: handleChange,
                       value: car.isAvailable,
                     }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
+                    }}
                   />
                 </GridItem>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> DevOps/main
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Insurance valid from (yyyy-mm-dd)"
@@ -238,6 +338,10 @@ export default function CarProfile(props) {
                     inputProps={{
                       onChange: handleChange,
                       value: car.insurance,
+                    }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
                     }}
                   />
                 </GridItem>
@@ -257,6 +361,10 @@ export default function CarProfile(props) {
                       onChange: handleChange,
                       value: car.segment,
                     }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
+                    }}
                   />
                 </GridItem>
 
@@ -274,6 +382,10 @@ export default function CarProfile(props) {
                     inputProps={{
                       onChange: handleChange,
                       value: car.regNumbers,
+                    }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
                     }}
                   />
                 </GridItem>
@@ -293,6 +405,10 @@ export default function CarProfile(props) {
                       onChange: handleChange,
                       value: car.filePath,
                     }}
+                    required
+                    inputProps={{
+                      onChange: handleChange
+                    }}
                   />
                 </GridItem>
 
@@ -304,6 +420,7 @@ export default function CarProfile(props) {
                       fullWidth: true,
                     }}
                     required
+<<<<<<< HEAD
                     labelProps={{
                       shrink: car.techRev ? true : false,
                     }}
@@ -319,6 +436,18 @@ export default function CarProfile(props) {
               <Button color="primary" onClick={SendData}>
                 Update Info
               </Button>
+=======
+                    inputProps={{
+                      onChange: handleChange
+                    }}
+                  />
+                </GridItem>
+
+              </GridContainer>
+            </CardBody>
+            <CardFooter>
+              <Button color="primary" onClick={SendData}>Update Info</Button>
+>>>>>>> DevOps/main
             </CardFooter>
           </Card>
         </GridItem>

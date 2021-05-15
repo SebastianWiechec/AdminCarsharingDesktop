@@ -11,9 +11,10 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import api, { API_TYPES } from "../../actions/api";
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
 
 const styles = {
   cardCategoryWhite: {
@@ -22,11 +23,11 @@ const styles = {
       margin: "0",
       fontSize: "14px",
       marginTop: "0",
-      marginBottom: "0"
+      marginBottom: "0",
     },
     "& a,& a:hover,& a:focus": {
-      color: "#FFFFFF"
-    }
+      color: "#FFFFFF",
+    },
   },
   cardTitleWhite: {
     color: "#FFFFFF",
@@ -40,92 +41,133 @@ const styles = {
       color: "#777",
       fontSize: "65%",
       fontWeight: "400",
-      lineHeight: "1"
-    }
-  }
+      lineHeight: "1",
+    },
+  },
 };
 
 const useStyles = makeStyles(styles);
 
 export default function TableList(props) {
-
-  const [spendings,setSpendings1] = useState([]);
+  const [spendings, setUpdatedSpendings] = useState([]);
+  const [oldSpendings, setOldSpendings] = useState([]);
+  const [filterSpendings, setFilterSpendings] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [costs, setCosts] = useState([]);
+  const [state, setState] = React.useState({
+    carId: 0,
+    costId: 0,
+  });
 
   useEffect(() => {
-      const fetchData = async () => {
-        console.log(props.match.params.id);
-        const request = await api.request(API_TYPES.SPENDINGS).fetchSpendings("/"+props.match.params.id);
-        setSpendings1(request.data);
-  
-        console.log(request.data);
-      };
-  
-      fetchData();
-    }, []);
+    const fetchData = async () => {
+      console.log(props.match.params.id);
 
-    let newSpendings = new Array();
-    spendings.forEach(element => {
-  
-      let date;
-      let carID;
-      let costID;
-      let price;
+      const request = await api
+        .request(API_TYPES.SPENDINGS)
+        .fetchSpendings("/" + props.match.params.id);
 
-      for (let [key, value] of Object.entries(element)) {
-    
-        if (key == "date") {
-          date = value.substring(0, value.indexOf("T"));
-        }
-        if (key == "carID") {
-          carID = value;
-        }
-        if (key == "costID") {
-          costID = value;
-        }
-        if (key == "price") {
-          price = value;
-        }
-        
-      }
-  
-      newSpendings.push({
-        date: date,
-        carID: carID,
-        costID: costID,
-        price:price
+      const costsResponse = await api.request(API_TYPES.COSTS).fetchAll();
+      const userCars = await api
+        .request(API_TYPES.SPENDINGS)
+        .fetchUserCars("/" + props.match.params.id);
 
-      })
+      setCars(userCars.data);
+
+      setCosts(costsResponse.data);
+      let mapSpendings = await setSpendings(request.data, userCars.data, costsResponse.data)
+      setOldSpendings(mapSpendings);
+      setUpdatedSpendings(mapSpendings);
+
+      console.log(userCars.data);
+      console.log(costsResponse.data);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const updateData = async () => {
+      setUpdatedSpendings(filterSpendings? filterSpendings:spendings);
+    };
+
+    updateData();
+  }, [filterSpendings]);
+
+  const handleChange = (event) => {
+
+    const name = event.target.id;
+
+
+
+    setState({
+      [name]: event.target.value,
     });
-    console.log(newSpendings)
+
+    if (event.target.value != 0) {
+      
+      let carSpendings = oldSpendings.filter((x) => x.carID == event.target.value);
+      setFilterSpendings(carSpendings);
+      // let a = filterSpendings ? filterSpendings : spendings;
+      // console.log(filterSpendings);
+
+    }else{
+      setFilterSpendings(oldSpendings);
+    }
+
+  };
+
+ async function setSpendings(spendings,cars,costs) {
+  
+    let newSpendings = spendings.map((spending) => {
+
+      spending.date = spending.date.substring(0, spending.date.indexOf("T"));
+      let carDesc = cars.find((car) => car.idCar === spending.carID);
+
+      spending.carID = carDesc.model;
+      let costDesc = costs.find((cost) => cost.idCosts === spending.costID);
+
+      spending.costID = costDesc.description;
+      delete  spending.idSpendings;
+      delete  spending.idUser;
+
+      return spending;
+    });
+    return newSpendings;
+  }
+
+  console.log("filterSpendings");
+  console.log(filterSpendings);
 
   const classes = useStyles();
   return (
     <GridContainer>
-      {/* <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Transakcje</h4>
-            <p className={classes.cardCategoryWhite}>
-              Lista ostatnich transakcji
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["ID", "Users", "Car", "Start Date", "End Date", "Price", "Is End", "Is Returned"]}
-              tableData={[
-                ["1", "dfgsdgf", "1", "2020-11-11", "2020-11-12", "500", "true", "true"],
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </GridItem> */}
+      <GridItem xs={12} sm={12} md={5}>
+        <InputLabel htmlFor="carId">Select car</InputLabel>
+        <Select
+          native
+          value={state.carId}
+          onChange={handleChange}
+          id="carId"
+          required
+          fullWidth="true"
+          formControlProps={{
+            fullWidth: true,
+          }}
+          inputProps={{}}
+        >
+          <option aria-label="None" value="" />
+          {cars.map((car, key) => (
+            <option key={key} value={car.model}>
+              {car.model}
+            </option>
+          ))}
+        </Select>
+      </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <Card plain>
           <CardHeader plain color="primary">
-            <h4 className={classes.cardTitleWhite}>
-              Wydatki
-            </h4>
+            <h4 className={classes.cardTitleWhite}>Wydatki</h4>
             <p className={classes.cardCategoryWhite}>
               Lista ostatnich wydatków
             </p>
@@ -133,8 +175,25 @@ export default function TableList(props) {
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={["Date", "CarID","CostID","Price"]}
-              tableData={newSpendings}
+              tableHead={["Date", "Car", "Cost", "Price"]}
+              tableData={spendings.filter(x=>x.costID != "Przebieg")}
+            />
+          </CardBody>
+        </Card>
+      </GridItem>
+      <GridItem xs={12} sm={12} md={12}>
+        <Card plain>
+          <CardHeader plain color="primary">
+            <h4 className={classes.cardTitleWhite}>Przebieg</h4>
+            <p className={classes.cardCategoryWhite}>
+              kilometry
+            </p>
+          </CardHeader>
+          <CardBody>
+            <Table
+              tableHeaderColor="primary"
+              tableHead={["Date", "Car", "Typ", "Ilość km"]}
+              tableData={spendings.filter(x=>x.costID == "Przebieg")}
             />
           </CardBody>
         </Card>

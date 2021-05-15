@@ -3,7 +3,6 @@ import axios from "axios";
 export const API_TYPES = {
     USER: "http://localhost:7000/User",
     CAR: "http://localhost:7000/Car",
-    // CAR: "http://localhost:7000/Car",
     SPENDINGS: "http://localhost:7000/Spendings",
     COSTS: "http://localhost:7000/Costs",
     TRANSACTIONS: "http://localhost:7000/Transactions",

@@ -56,6 +56,9 @@ export default function SpendingNew(props) {
   const [state, setState] = React.useState({
     carId: 0, costId: 0
   });
+  const [stateKm, setStateKm] = React.useState({
+    carId: 0, km: 0
+  });
 
 
   useEffect(() => {
@@ -66,14 +69,13 @@ export default function SpendingNew(props) {
 
       setCosts(costsResponse.data);
       setCars(userCars.data);
-      console.log(userCars.data)
-      console.log(costsResponse.data)
 
     };
 
     fetchData();
   }, []);
-  console.log("tu")
+
+
   const handleChange = (event) => {
     console.log("tu")
     const name = event.target.id;
@@ -83,15 +85,32 @@ export default function SpendingNew(props) {
     });
   };
 
-  async function SendData(){
+  const handleChangeKm = (event) => {
+
+    const name = event.target.id;
+    setStateKm({
+      ...stateKm,
+      [name]: event.target.value,
+    });
+  };
+
+  async function SendData() {
+
     state.idSpendings = 0;
-    state.carId = parseInt(state.carId);
-    state.costId = parseInt(state.costId);
-    state.price = parseInt(state.price);
-    state.Date = new Date().toISOString().slice(0,10);
+    state.Date = new Date().toISOString().slice(0, 10);
     state.idUser = props.match.params.id;
 
-    await api.request(API_TYPES.SPENDINGS).create("/AddSpending/",state);
+    if (stateKm.km != 0) {
+      state.carId = parseInt(stateKm.carId);
+      state.price = parseInt(stateKm.km);
+      state.costId = 99;
+    } else {
+      state.carId = parseInt(state.carId);
+      state.costId = parseInt(state.costId);
+      state.price = parseInt(state.price);
+    }
+
+    await api.request(API_TYPES.SPENDINGS).create("/AddSpending/", state);
 
   }
 
@@ -144,7 +163,7 @@ export default function SpendingNew(props) {
                     }}
                   >
                     <option aria-label="None" value="" />
-                    {costs.map((cost, key) => (
+                    {costs.filter(x => x.idCosts != 99).map((cost, key) => (
                       <option key={key} value={cost.idCosts}>{cost.description}</option>
                     ))}
 
@@ -169,11 +188,71 @@ export default function SpendingNew(props) {
               </GridContainer>
             </CardBody>
             <CardFooter>
+              <Button color="primary" onClick={SendData}>Dodaj p</Button>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>Add km</h4>
+              <p className={classes.cardCategoryWhite}> Fill required fields</p>
+            </CardHeader>
+            <CardBody>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12}>
+                  <InputLabel htmlFor="carId">Select car</InputLabel>
+                  <Select
+                    native
+                    value={stateKm.carId}
+                    onChange={handleChangeKm}
+                    id="carId"
+                    required
+                    fullWidth="true"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                    }}
+                  >
+                    <option aria-label="None" value="" />
+                    {cars.map((car, key) => (
+                      <option key={key} value={car.idCar}>{car.model}</option>
+                    ))}
+                  </Select>
+                </GridItem>
+
+                <GridItem xs={12} sm={12} md={12}>
+                  <CustomInput
+                    labelText="Enter km"
+                    id="km"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: handleChangeKm,
+                      value: stateKm.km,
+                      type: "number"
+                    }}
+                  />
+                </GridItem>
+                {/* </FormControl> */}
+              </GridContainer>
+            </CardBody>
+            <CardFooter>
               <Button color="primary" onClick={SendData}>Update Info</Button>
             </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
+
+
+
     </div>
+
+
   );
 }

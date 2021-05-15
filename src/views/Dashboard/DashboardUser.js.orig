@@ -48,7 +48,11 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
+<<<<<<< HEAD
+  const [expanded, setExpanded] = React.useState(false);
+=======
   const [expanded, setExpanded] = useState(false);
+>>>>>>> DevOps/main
   const [carDesc, setData] = useState([{}]);
   const [spendings, setSpendings] = useState([]);
 
@@ -93,6 +97,11 @@ export default function Dashboard(props) {
     return map;
   }, {});
 
+<<<<<<< HEAD
+  // console.log(map)
+
+=======
+>>>>>>> DevOps/main
   var array = Object.keys(map).map(function (date) {
     return {
       date: date.substring(0, date.indexOf("T")),
@@ -113,10 +122,23 @@ export default function Dashboard(props) {
     }
   });
 
+<<<<<<< HEAD
+  // console.log(newDatalabels);
+  // console.log(newDataseries);
+
+  emailsSubscriptionChart.data.labels = newDatalabels;
+  emailsSubscriptionChart.data.series = [newDataseries];
+
+  // const cookies = new Cookies();
+  let userId = props.match.params.id;
+  //cookies.get("userId");
+  // console.log(userId);
+=======
   emailsSubscriptionChart.data.labels = newDatalabels;
   emailsSubscriptionChart.data.series = [newDataseries];
 
   let userId = props.match.params.id;
+>>>>>>> DevOps/main
 
   async function SendData() {
     let email = {
@@ -126,17 +148,34 @@ export default function Dashboard(props) {
       Html: "",
       IdUser: userId
     };
+<<<<<<< HEAD
+    console.log(email)
+=======
 
+>>>>>>> DevOps/main
     await api.request(API_TYPES.SPENDINGS).sendEmail(email);
   }
 
   useEffect(() => {
     const fetchData = async () => {
+<<<<<<< HEAD
+      const request = await api
+        .request(API_TYPES.SPENDINGS)
+        .fetchUserCars("/" + userId);
+      const userSpendings = await api
+        .request(API_TYPES.SPENDINGS)
+        .fetchSpendings("/" + userId);
+
+      setData(request.data);
+      setSpendings(userSpendings.data);
+      console.log(userSpendings.data);
+=======
       const request = await api.request(API_TYPES.SPENDINGS).fetchUserCars("/" + userId);
       const userSpendings = await api.request(API_TYPES.SPENDINGS).fetchSpendings("/" + userId);
 
       setData(request.data);
       setSpendings(userSpendings.data);
+>>>>>>> DevOps/main
     };
 
     fetchData();

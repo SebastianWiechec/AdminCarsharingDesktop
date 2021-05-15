@@ -50,6 +50,10 @@ export default function Admin({ ...rest }) {
   const [color, setColor] = React.useState("blue");
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const role = localStorage.getItem("role");
+  console.log(role);
+
   const handleImageClick = image => {
     setImage(image);
   };
@@ -95,7 +99,7 @@ export default function Admin({ ...rest }) {
   return (
     <div className={classes.wrapper}>
       <Sidebar
-        routes={routes}
+        routes={routes.filter(x=>x.role == role || x.role == "All")}
         logoText={"Carsharing"}
         logo={logo}
         image={image}

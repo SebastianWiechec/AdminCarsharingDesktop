@@ -102,6 +102,10 @@ const boxShadow = {
     hexToRgb(blackColor) +
     ", 0.2)"
 };
+const buttonRight={
+  float: "right",
+  marginLeft: "100px"
+};
 
 const primaryBoxShadow = {
   boxShadow:
@@ -297,5 +301,6 @@ export {
   title,
   cardTitle,
   cardSubtitle,
-  cardLink
+  cardLink,
+  buttonRight
 };

@@ -86,7 +86,7 @@ export default function Dashboard(props) {
   let newDatalabels = new Array();
   let newDataseries = new Array();
 
-  var map = spendings.reduce(function (map, spending) {
+  var map = spendings.filter(x => x.costID != 99).reduce(function (map, spending) {
     var date = spending.date;
     var price = +spending.price;
     map[date] = (map[date] || 0) + price;

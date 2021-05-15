@@ -42,11 +42,14 @@ import CarProfile from "views/Car/Car";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import logList from "views/Logs/logs";
 import SignInSide from "views/SignIn/SignIn";
+<<<<<<< HEAD
 import CarList from "views/Car/CarList";
 import CarAvailable from "views/Car/CarAvialable";
+=======
+>>>>>>> DevOps/main
 
-// localStorage.setItem("role", "admin");
-
+localStorage.setItem("role", "user");
+const role = localStorage.getItem("role");
 
 const dashboardRoutes = [
   {
@@ -54,37 +57,34 @@ const dashboardRoutes = [
     name: "Dashboard",
     rtlName: "لوحة القيادة",
     icon: Dashboard,
-    component: AdminDashboard,
+    component: role == "admin" ? AdminDashboard : UserDashboard,
     layout: "/admin",
-    role: "Admin",
   },
-  {
-    path: "/dashboard/:id",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: Dashboard,
-    component: UserDashboard,
-    layout: "/admin",
-    role: "User",
-  },
-  {
-    path: "/CarList/:id",
-    name: "Car List",
-    rtlName: "ملف تعريفي للمستخدم",
-    icon: DriveEtaIcon,
-    component: CarList,
-    layout: "/admin",
-    role: "Admin",
-  },
-  {
-    path: "/user/:id",
-    name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
-    icon: Person,
-    component: UserProfile,
-    layout: "/admin",
-    role: "User",
-  },
+  role == "admin"
+    ?  {
+<<<<<<< HEAD
+        path: "/CarList/:id",
+        name: "Car List",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: DriveEtaIcon,
+        component: CarList,
+=======
+        path: "/Car/:id",
+        name: "Car add-edit",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: DriveEtaIcon,
+        component: Car,
+>>>>>>> DevOps/main
+        layout: "/admin",
+      }:
+      {
+        path: "/user/:id",
+        name: "User Profile",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: Person,
+        component: UserProfile,
+        layout: "/admin",
+      },
   {
     path: "/Spending/:id",
     name: "Add spending",
@@ -92,7 +92,6 @@ const dashboardRoutes = [
     icon: MonetizationOnIcon,
     component: SpendingNew,
     layout: "/admin",
-    role: "All",
   },
   {
     path: "/table/:id",
@@ -101,8 +100,9 @@ const dashboardRoutes = [
     icon: "content_paste",
     component: TableList,
     layout: "/admin",
-    role: "All",
-  },
+<<<<<<< HEAD
+  }
+  ,
   {
     path: "/Car/:id",
     name: "Car",
@@ -110,26 +110,38 @@ const dashboardRoutes = [
     icon: DriveEtaIcon,
     component: CarProfile,
     layout: "/admin",
-    role: "None",
+=======
+>>>>>>> DevOps/main
   },
-  {
-    path: "/logs/:id",
-    name: "Log List",
-    rtlName: "قائمة الجدول",
-    icon: "content_paste",
-    component: logList,
-    layout: "/admin",
-    role: "User",
-  },
-  {
-    path: "/CarAvailable/:id",
-    name: "Available cars",
-    rtlName: "قائمة الجCarAvailableدول",
-    icon: "content_paste",
-    component: CarAvailable,
-    layout: "/admin",
-    role: "User",
-  },
+  role == "admin"
+    ? {
+        path: "/SignIn/:id",
+        name: "Log In",
+        rtlName: "قائمة الجدول",
+        icon: "content_paste",
+        component: SignInSide,
+        layout: "/admin",
+      }
+    : {
+        path: "/logs/:id",
+        name: "Log List",
+        rtlName: "قائمة الجدول",
+        icon: "content_paste",
+        component: logList,
+        layout: "/admin",
+      },
+<<<<<<< HEAD
+      {
+        path: "/CarAvailable/:id",
+        name: "Available cars",
+        rtlName: "قائمة الجCarAvailableدول",
+        icon: "content_paste",
+        component: CarAvailable,
+        layout: "/admin",
+      }
+      
+=======
+>>>>>>> DevOps/main
 ];
 
 export default dashboardRoutes;

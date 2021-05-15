@@ -18,7 +18,7 @@ import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
-
+import LogoutButton from "../../views/SignIn/Logout";
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
 const useStyles = makeStyles(styles);
@@ -47,6 +47,7 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+
   return (
     <div>
       <div className={classes.searchWrapper}>
@@ -206,12 +207,7 @@ export default function AdminNavbarLinks() {
                       Settings
                     </MenuItem>
                     <Divider light />
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
-                      Logout
-                    </MenuItem>
+                    <LogoutButton/>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

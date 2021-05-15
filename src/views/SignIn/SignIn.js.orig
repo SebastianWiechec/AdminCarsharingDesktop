@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /* eslint-disable react/prop-types */
+=======
+>>>>>>> DevOps/main
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
@@ -82,10 +85,14 @@ export default function SignInSide(props) {
       localStorage.setItem('user', user.Email);
       localStorage.setItem('userId', respose.data.id);
       localStorage.setItem('token', respose.data.token);
-      localStorage.setItem('role', respose.data.role);
-      console.log(respose.data)
+      console.log(`/admin/dashboard/${respose.data.id}`)
       props.history.push(`/admin/dashboard/${respose.data.id}`);
     })
+<<<<<<< HEAD
+    // 
+
+=======
+>>>>>>> DevOps/main
   }
   const classes = useStyles();
 
