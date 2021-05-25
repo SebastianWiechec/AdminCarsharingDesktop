@@ -75,7 +75,11 @@ export default function TableList(props) {
       setCars(userCars.data);
 
       setCosts(costsResponse.data);
-      let mapSpendings = await setSpendings(request.data, userCars.data, costsResponse.data)
+      let mapSpendings = await setSpendings(
+        request.data,
+        userCars.data,
+        costsResponse.data
+      );
       setOldSpendings(mapSpendings);
       setUpdatedSpendings(mapSpendings);
 
@@ -88,39 +92,37 @@ export default function TableList(props) {
 
   useEffect(() => {
     const updateData = async () => {
-      setUpdatedSpendings(filterSpendings? filterSpendings:spendings);
+      setUpdatedSpendings(filterSpendings ? filterSpendings : spendings);
     };
 
     updateData();
   }, [filterSpendings]);
 
   const handleChange = (event) => {
-
     const name = event.target.id;
-
-
 
     setState({
       [name]: event.target.value,
     });
 
     if (event.target.value != 0) {
-      
-      let carSpendings = oldSpendings.filter((x) => x.carID == event.target.value);
+      let carSpendings = oldSpendings.filter(
+        (x) => x.carID == event.target.value
+      );
       setFilterSpendings(carSpendings);
       // let a = filterSpendings ? filterSpendings : spendings;
       // console.log(filterSpendings);
-
-    }else{
+    } else {
       setFilterSpendings(oldSpendings);
     }
-
   };
 
- async function setSpendings(spendings,cars,costs) {
-  
-    let newSpendings = spendings.map((spending) => {
+  async function setSpendings(spendings, cars, costs) {
+    let userSpendings = spendings.filter((s) =>
+      cars.find((c) => c.idCar == s.carID)
+    );
 
+    let newSpendings = userSpendings.map((spending) => {
       spending.date = spending.date.substring(0, spending.date.indexOf("T"));
       let carDesc = cars.find((car) => car.idCar === spending.carID);
 
@@ -128,8 +130,8 @@ export default function TableList(props) {
       let costDesc = costs.find((cost) => cost.idCosts === spending.costID);
 
       spending.costID = costDesc.description;
-      delete  spending.idSpendings;
-      delete  spending.idUser;
+      delete spending.idSpendings;
+      delete spending.idUser;
 
       return spending;
     });
@@ -176,7 +178,7 @@ export default function TableList(props) {
             <Table
               tableHeaderColor="primary"
               tableHead={["Date", "Car", "Cost", "Price"]}
-              tableData={spendings.filter(x=>x.costID != "Przebieg")}
+              tableData={spendings.filter((x) => x.costID != "Przebieg")}
             />
           </CardBody>
         </Card>
@@ -185,15 +187,13 @@ export default function TableList(props) {
         <Card plain>
           <CardHeader plain color="primary">
             <h4 className={classes.cardTitleWhite}>Przebieg</h4>
-            <p className={classes.cardCategoryWhite}>
-              kilometry
-            </p>
+            <p className={classes.cardCategoryWhite}>kilometry</p>
           </CardHeader>
           <CardBody>
             <Table
               tableHeaderColor="primary"
               tableHead={["Date", "Car", "Typ", "Ilość km"]}
-              tableData={spendings.filter(x=>x.costID == "Przebieg")}
+              tableData={spendings.filter((x) => x.costID == "Przebieg")}
             />
           </CardBody>
         </Card>
