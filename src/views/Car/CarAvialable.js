@@ -20,11 +20,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
-import ResponsiveDialog from "../../components/Modal/Modal";
-
-function Modal(txt) {
-  return <ResponsiveDialog text={txt}/>
-}
+import Modal from "../../components/Modal/Modal";
 
 const styles = {
   cardCategoryWhite: {
@@ -88,8 +84,9 @@ export default function CarAvailable(props) {
     { field: "model", headerName: "Model", flex: 0.3 },
     { field: "color1", headerName: "Color", flex: 0.3 },
     { field: "yofProd1", headerName: "Year of Prod.", flex: 0.3 },
-    { field: "priceDay1", headerName: "Price per day", flex: 0.3 },
+    { field: "priceDay", headerName: "Price per day", flex: 0.3 },
   ];
+  const [open, setOpen] = useState(false);
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -118,7 +115,7 @@ export default function CarAvailable(props) {
     endDate: null,
   });
 
-  const setCarList = (list)=>{
+  const setCarList = (list) => {
     const updatedJson = list.map(
       ({
         idCar: id,
@@ -152,13 +149,12 @@ export default function CarAvailable(props) {
     );
 
     setData(updatedJson.filter((x) => x.isAvailable1 == 1));
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const request = await api.request(API_TYPES.CAR).fetchAll();
-      setCarList(request.data)
-      
+      setCarList(request.data);
     };
 
     fetchData();
@@ -166,36 +162,43 @@ export default function CarAvailable(props) {
 
   const reserveCar = async () => {
     sendTransaction();
+  };
 
+  const handleClose = () => {
+    setOpen(false);
   };
 
   async function sendTransaction() {
+    if (selectionModel) {
+      let car = carList.filter((x) => x.id == selectionModel);
+      if (car) {
+        let newTransaction = {
+          Transaction: 0,
+          User: props.match.params.id,
+          Car: parseInt(selectionModel),
+          Price: parseInt(car[0].priceDay),
+          IsEnd: false,
+          IsReturned: false,
+          StartDate: new Date(state.startDate),
+          EndDate: new Date(state.endDate),
+        };
 
-    let car = carList.filter(x=>x.id == selectionModel);
-    console.log(car)
-      let newTransaction={
-        Transaction: 0,
-        User: props.match.params.id,
-        Car: parseInt(selectionModel),
-        Price: parseInt(car[0].priceDay),
-        IsEnd:false,
-        IsReturned:false,
-        StartDate:new Date(state.startDate),
-        EndDate:new Date(state.endDate),
+        await api
+          .request(API_TYPES.TRANSACTIONS)
+          .create("", newTransaction)
+          .then((response) => {
+            console.log(response);
+            if (response.data == "OK") {
+              setRefresh(!refresh);
+              setSelectionModel(null);
+              setOpen(true);
+            }
+          });
       }
-      console.log(newTransaction)
-      await api.request(API_TYPES.TRANSACTIONS).create("",newTransaction).then( response=>{
-        console.log(response)
-        if(response.data == "OK"){
-          
- setRefresh(!refresh)
-          Modal(response.data);
-        }
-    })
+    }
   }
 
   const handleChange = (e) => {
-
     setState((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -205,7 +208,12 @@ export default function CarAvailable(props) {
   return (
     <div>
       <GridContainer>
-        {" "}
+        <Modal
+          open={open}
+          onChange={handleClose}
+          txt={"OK"}
+          title={"Auto wynajęte"}
+        />
         <Container maxWidth="lg">
           <div style={{ height: 600, marginTop: 80 }}>
             <DataGrid
@@ -221,28 +229,28 @@ export default function CarAvailable(props) {
             />
           </div>
         </Container>
-
       </GridContainer>
       <GridContainer>
         <Container maxWidth="lg">
-          {selectionModel.map((val, key) => (
-            val ? (
-              <div>
-                <DateTimePickerComponent
-                  value={state}
-                  classes={classes}
-                  onChange={handleChange}
-                />
-                <Button variant="contained" color="primary" onClick={reserveCar}>
-                  Wynajmij Pojazd
-          </Button>
-              </div>
-
-            ) : null
-
-
-          ))}
-
+          {selectionModel &&
+            selectionModel.map((val, key) =>
+              val ? (
+                <div>
+                  <DateTimePickerComponent
+                    value={state}
+                    classes={classes}
+                    onChange={handleChange}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={reserveCar}
+                  >
+                    Wynajmij Pojazd
+                  </Button>
+                </div>
+              ) : null
+            )}
         </Container>
       </GridContainer>
     </div>

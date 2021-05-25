@@ -34,7 +34,7 @@ import api, { API_TYPES } from "../../actions/api";
 import Cookies from "universal-cookie";
 import { bugs, website, server } from "variables/general.js";
 import Button from "components/CustomButtons/Button.js";
-
+import Modal from "../../components/Modal/Modal";
 import {
   dailySalesChart,
   emailsSubscriptionChart,
@@ -42,15 +42,18 @@ import {
 } from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
-
-async function SendData() {}
+import { SettingsPowerRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [carDesc, setData] = useState([{}]);
   const [spendings, setSpendings] = useState([]);
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   let newCars = new Array();
   carDesc.forEach((element) => {
@@ -86,7 +89,7 @@ export default function Dashboard(props) {
   let newDatalabels = new Array();
   let newDataseries = new Array();
 
-  var map = spendings.filter(x => x.costID != 99).reduce(function (map, spending) {
+  var map = spendings.reduce(function (map, spending) {
     var date = spending.date;
     var price = +spending.price;
     map[date] = (map[date] || 0) + price;
@@ -116,8 +119,22 @@ export default function Dashboard(props) {
   emailsSubscriptionChart.data.labels = newDatalabels;
   emailsSubscriptionChart.data.series = [newDataseries];
 
-  const cookies = new Cookies();
   let userId = props.match.params.id;
+
+  async function SendData() {
+    const emailAddress = localStorage.getItem("user");
+    let email = {
+      From: "CarsharingN3PAM@gmail.com",
+      To: emailAddress,
+      Subject: `Wydatki użytkownika ${emailAddress}`,
+      Html: "",
+      IdUser: userId,
+    };
+
+    await api.request(API_TYPES.SPENDINGS).sendEmail(email);
+    setOpen(true);
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,7 +147,6 @@ export default function Dashboard(props) {
 
       setData(request.data);
       setSpendings(userSpendings.data);
-      console.log(userSpendings.data);
     };
 
     fetchData();
@@ -146,13 +162,13 @@ export default function Dashboard(props) {
               <CardIcon color="success">
                 <Icon>payments</Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Wydatki</p>
+              <p className={classes.cardCategory}>Wydatki User</p>
               <h3 className={classes.cardTitle}>{sumValues} PLN</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
                 <DateRange />
-                Twoje wydatki 
+                Twoje wydatki
               </div>
             </CardFooter>
           </Card>
@@ -174,8 +190,6 @@ export default function Dashboard(props) {
             </CardFooter>
           </Card>
         </GridItem>
-      </GridContainer>
-      <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card chart>
             <CardHeader color="warning">
@@ -210,6 +224,7 @@ export default function Dashboard(props) {
                   alignItems="center"
                 >
                   <Button
+                    // className={classes.cardTitle}
                     color="primary"
                     onClick={SendData}
                   >
@@ -226,10 +241,6 @@ export default function Dashboard(props) {
             </CardFooter>
           </Card>
         </GridItem>
-        
-      </GridContainer>
-      <GridContainer>
-       
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="success">
@@ -246,6 +257,12 @@ export default function Dashboard(props) {
           </Card>
         </GridItem>
       </GridContainer>
+      <Modal
+        open={open}
+        onChange={handleClose}
+        txt={"OK"}
+        title={"Koszty Wysłane"}
+      />
     </div>
   );
 }

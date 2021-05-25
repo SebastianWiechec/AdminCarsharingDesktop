@@ -119,7 +119,7 @@ const dashboardRoutes = [
     icon: "content_paste",
     component: CarAvailable,
     layout: "/admin",
-    role: "User",
+    role: "All",
   },
 ];
 

@@ -66,7 +66,6 @@ export default function CarList(props) {
     { field: "segment1", headerName: "Segment", width: 70 },
     { field: "regNumbers1", headerName: "Registration number", width: 130 },
     { field: "techRev1", headerName: "Technical reviev to", width: 120 },
-    { field: "string", headerName: "stringxvxcv", width: 120 },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -138,11 +137,11 @@ export default function CarList(props) {
       <GridContainer>
         {" "}
         <Container maxWidth="lg">
-          <div style={{ height: 600, marginTop: 80 }}>
+          <div style={{ height: 800, marginTop: 80 }}>
             <DataGrid
               rows={carList}
               columns={columns}
-              pageSize={10}
+              pageSize={carList.length}
               id="idCar"
               hideFooterPagination
               onSelectionModelChange={(newSelection) => {
@@ -153,9 +152,6 @@ export default function CarList(props) {
               selectionModel={selectionModel}
             />
           </div>
-          {selectionModel.map((val, key) => (
-            <h1 key={key}>{val}{href}</h1>
-          ))}
           <Typography paragraph></Typography>
           <Button variant="contained" color="primary" href={href}>
             Edytuj/dodaj Pojazd

@@ -66,7 +66,7 @@ export default function CarProfile(props) {
     console.log(car);
 
     if (car.idCar != 0) {
-      await api.request(API_TYPES.CAR).update(car.id, car);
+      await api.request(API_TYPES.CAR).update(car.id, car, );
     } else {
       await api.request(API_TYPES.CAR).create("/", car);
     }

@@ -38,7 +38,7 @@ const useStyles = makeStyles(styles);
 
 export default function UserProfile(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [user, setUser] = useState({});
 
 

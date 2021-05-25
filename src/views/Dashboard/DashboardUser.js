@@ -34,7 +34,7 @@ import api, { API_TYPES } from "../../actions/api";
 import Cookies from "universal-cookie";
 import { bugs, website, server } from "variables/general.js";
 import Button from "components/CustomButtons/Button.js";
-
+import Modal from "../../components/Modal/Modal";
 import {
   dailySalesChart,
   emailsSubscriptionChart,
@@ -42,6 +42,7 @@ import {
 } from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import { SettingsPowerRounded } from "@material-ui/icons";
 
 
 
@@ -51,6 +52,10 @@ export default function Dashboard(props) {
   const [expanded, setExpanded] = useState(false);
   const [carDesc, setData] = useState([{}]);
   const [spendings, setSpendings] = useState([]);
+  const [open, setOpen] = useState(false)
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   let newCars = new Array();
   carDesc.forEach((element) => {
@@ -119,15 +124,18 @@ export default function Dashboard(props) {
   let userId = props.match.params.id;
 
   async function SendData() {
+   const emailAddress = localStorage.getItem('user');
     let email = {
-      From: localStorage.getItem('user'),
-      To: "adrianmastalerz01@gmail.com",
-      Subject: `Wydatki użytkownika ${localStorage.getItem('user')}`,
+      From: emailAddress,
+      To: emailAddress,
+      Subject: `Wydatki użytkownika ${emailAddress}`,
       Html: "",
       IdUser: userId
     };
 
-    await api.request(API_TYPES.SPENDINGS).sendEmail(email);
+    await api.request(API_TYPES.SPENDINGS).sendEmail(email).then(res=>{
+      setOpen(true);
+    });
   }
 
   useEffect(() => {
@@ -223,7 +231,12 @@ export default function Dashboard(props) {
                 </GridItem>
               </GridContainer>
             </CardBody>
-
+                <Modal
+                open={open}
+                onChange={handleClose}
+                txt={"OK"}
+                title={"Auto wynajęte"}
+              />
             <CardFooter chart>
               <div className={classes.stats}>
                 <AccessTime /> Zaktualizowano 2 minuty temu

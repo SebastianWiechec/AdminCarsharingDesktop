@@ -188,7 +188,7 @@ export default function SpendingNew(props) {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary" onClick={SendData}>Dodaj p</Button>
+              <Button color="primary" onClick={SendData}>Dodaj wydatek</Button>
             </CardFooter>
           </Card>
         </GridItem>
@@ -243,7 +243,7 @@ export default function SpendingNew(props) {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary" onClick={SendData}>Update Info</Button>
+              <Button color="primary" onClick={SendData}>Dodaj przebieg</Button>
             </CardFooter>
           </Card>
         </GridItem>

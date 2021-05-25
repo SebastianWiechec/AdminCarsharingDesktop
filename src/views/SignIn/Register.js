@@ -64,7 +64,7 @@ export default function SignUp() {
       Email: email,
       UserName: userName
     }
-    await api.request(API_TYPES.USER).userRegister(password,user).then(respose => (console.log(respose)))
+    await api.request(API_TYPES.USER).userRegister(password,user)
     // user
 
   }
