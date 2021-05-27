@@ -1,24 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-// core components
-import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
-import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
 import api, { API_TYPES } from "../../actions/api";
 import { DataGrid } from "@material-ui/data-grid";
 import Container from "@material-ui/core/Container";
-// import Button from '@material-ui/core/Button';
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Modal from "../../components/Modal/Modal";
 
@@ -50,7 +37,6 @@ const DateTimePickerComponent = (props) => {
           label="Next appointment"
           type="datetime-local"
           value={props.startDate}
-          // defaultValue={new Date().toISOString()}
           name="startDate"
           className={props.classes.textField}
           onChange={props.onChange}
@@ -64,7 +50,6 @@ const DateTimePickerComponent = (props) => {
           label="Next appointment"
           type="datetime-local"
           value={props.endDate}
-          // defaultValue={new Date().toISOString()}
           name="endDate"
           className={props.classes.textField}
           onChange={props.onChange}
@@ -187,7 +172,6 @@ export default function CarAvailable(props) {
           .request(API_TYPES.TRANSACTIONS)
           .create("", newTransaction)
           .then((response) => {
-            console.log(response);
             if (response.data == "OK") {
               setRefresh(!refresh);
               setSelectionModel(null);

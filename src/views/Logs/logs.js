@@ -1,8 +1,5 @@
 /* eslint-disable no-unused-vars */
-//import React from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
@@ -51,12 +48,8 @@ export default function logList(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(props.match.params.id);
       const request = await api.request(API_TYPES.SPENDINGS).fetchLogs("/" + props.match.params.id);
-      // if (request.data == null)
-      //   return <Redirect to={NotFoundPage} />
       setLogs(request.data);
-      console.log(request.data);
     };
 
     fetchData();
@@ -88,7 +81,6 @@ export default function logList(props) {
       message: message
     })
   });
-  console.log(newLogs)
 
   const classes = useStyles();
   return (

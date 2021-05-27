@@ -39,16 +39,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
-/**
- * 
- */
+
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
@@ -65,7 +63,6 @@ export default function SignUp() {
       UserName: userName
     }
     await api.request(API_TYPES.USER).userRegister(password,user)
-    // user
 
   }
 

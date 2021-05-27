@@ -15,7 +15,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import api, { API_TYPES } from '../../actions/api'
-//import LoginButton from "../components/Auth0Login";
 
 function Copyright() {
   return (
@@ -53,16 +52,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%', 
     marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
-/**
- * 
- */
+
 export default function SignInSide(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -83,7 +80,6 @@ export default function SignInSide(props) {
       localStorage.setItem('userId', respose.data.id);
       localStorage.setItem('token', respose.data.token);
       localStorage.setItem('role', respose.data.role);
-      console.log(respose.data)
       props.history.push(`/admin/dashboard/${respose.data.id}`);
     })
   }

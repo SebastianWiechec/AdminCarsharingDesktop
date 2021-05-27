@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -8,11 +7,9 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import api, { API_TYPES } from "../../actions/api";
-import avatar from "assets/img/faces/marc.jpg";
 import Modal from "../../components/Modal/Modal";
 
 const styles = {
@@ -65,7 +62,6 @@ export default function UserProfile(props) {
   async function SendData() {
 
     user.idUser = props.match.params.id
-    console.log(user);
     await api.request(API_TYPES.USER).update(user.idUser, user).then(res => {
       setUser(res.data);
       setOpen(true)
@@ -232,27 +228,6 @@ export default function UserProfile(props) {
             <CardFooter>
               <Button color="primary" onClick={SendData} >Update Profile</Button>
             </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
-              <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
-            </CardBody>
           </Card>
         </GridItem>
       </GridContainer>

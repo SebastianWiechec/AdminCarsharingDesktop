@@ -1,9 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-//import React from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
@@ -12,7 +9,6 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import api, { API_TYPES } from "../../actions/api";
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 
@@ -61,8 +57,6 @@ export default function TableList(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(props.match.params.id);
-
       const request = await api
         .request(API_TYPES.SPENDINGS)
         .fetchSpendings("/" + props.match.params.id);
@@ -82,9 +76,6 @@ export default function TableList(props) {
       );
       setOldSpendings(mapSpendings);
       setUpdatedSpendings(mapSpendings);
-
-      console.log(userCars.data);
-      console.log(costsResponse.data);
     };
 
     fetchData();
@@ -110,8 +101,6 @@ export default function TableList(props) {
         (x) => x.carID == event.target.value
       );
       setFilterSpendings(carSpendings);
-      // let a = filterSpendings ? filterSpendings : spendings;
-      // console.log(filterSpendings);
     } else {
       setFilterSpendings(oldSpendings);
     }
@@ -137,9 +126,6 @@ export default function TableList(props) {
     });
     return newSpendings;
   }
-
-  console.log("filterSpendings");
-  console.log(filterSpendings);
 
   const classes = useStyles();
   return (

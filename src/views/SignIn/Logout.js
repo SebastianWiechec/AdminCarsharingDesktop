@@ -6,17 +6,7 @@ import styles from "assets/jss/material-dashboard-react/components/headerLinksSt
 
 const useStyles = makeStyles(styles);
 
-// function LogoutUser() {
-//   let history = useHistory();
-//   localStorage.removeItem("user");
-//   localStorage.removeItem("userId");
-//   localStorage.removeItem("token");
-//   history.push("/SignIn/");
-//   // logout({ returnTo: window.location.origin })
-// }
-
 const LogoutButton = () => {
-  // const { logout } = useAuth0();
   const classes = useStyles();
   let history = useHistory();
   function LogoutUser() {

@@ -1,22 +1,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-// core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import api, { API_TYPES } from "../../actions/api";
 
-import avatar from "assets/img/faces/marc.jpg";
 
 const styles = {
   cardCategoryWhite: {
@@ -40,13 +35,9 @@ const styles = {
 export default function CarProfile(props) {
   const [car, setCar] = useState({ idCar: 0 });
   const selectedCarId = props.match.params.id;
-  console.log(selectedCarId);
-
   const useStyles = makeStyles(styles);
   const classes = useStyles();
-  console.log("tu");
   const handleChange = (event) => {
-    console.log("tu");
     const name = event.target.id;
     setCar({
       ...car,
@@ -63,7 +54,6 @@ export default function CarProfile(props) {
     car.segment = parseInt(car.segment);
     car.insurance = new Date(car.insurance);
     car.techRev = new Date(car.techRev);
-    console.log(car);
 
     if (car.idCar != 0) {
       await api.request(API_TYPES.CAR).update(car.id, car, );
@@ -80,7 +70,6 @@ export default function CarProfile(props) {
           .fetchById("/" + selectedCarId);
 
         setCar(request.data);
-        console.log(request.data);
       }
     };
 
