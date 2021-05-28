@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import GridItem from "components/Grid/GridItem.js";
@@ -11,8 +11,9 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import Select from '@material-ui/core/Select';
+import Select from "@material-ui/core/Select";
 import api, { API_TYPES } from "../../actions/api";
+import Modal from "../../components/Modal/Modal";
 
 const useStyles = makeStyles((theme) => ({
   cardCategoryWhite: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0",
     fontSize: "14px",
     marginTop: "0",
-    marginBottom: "0"
+    marginBottom: "0",
   },
   cardTitleWhite: {
     color: "#FFFFFF",
@@ -29,10 +30,10 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
-    textDecoration: "none"
+    textDecoration: "none",
   },
   button: {
-    display: 'block',
+    display: "block",
     marginTop: theme.spacing(2),
   },
   formControl: {
@@ -41,34 +42,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function SpendingNew(props) {
-
   const classes = useStyles();
   const [costs, setCosts] = useState([]);
   const [cars, setCars] = useState([]);
   const [state, setState] = React.useState({
-    carId: 0, costId: 0
+    carId: 0,
+    costId: 0,
+    price:0,
   });
   const [stateKm, setStateKm] = React.useState({
-    carId: 0, km: 0
+    carId: 0,
+    km: 0,
   });
-
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-
       const costsResponse = await api.request(API_TYPES.COSTS).fetchAll();
-      const userCars = await api.request(API_TYPES.SPENDINGS).fetchUserCars("/" + props.match.params.id);
+      const userCars = await api
+        .request(API_TYPES.SPENDINGS)
+        .fetchUserCars("/" + props.match.params.id);
 
       setCosts(costsResponse.data);
       setCars(userCars.data);
-
     };
 
     fetchData();
   }, []);
-
 
   const handleChange = (event) => {
     const name = event.target.id;
@@ -79,7 +84,6 @@ export default function SpendingNew(props) {
   };
 
   const handleChangeKm = (event) => {
-
     const name = event.target.id;
     setStateKm({
       ...stateKm,
@@ -87,8 +91,19 @@ export default function SpendingNew(props) {
     });
   };
 
-  async function SendData() {
+  const clearFields = () => {
+    setStateKm({
+      carId: 0,
+      km: 0,
+    });
+    setState({
+      carId: 0,
+      costId: 0,
+      price:0,
+    });
+  };
 
+  async function SendData() {
     state.idSpendings = 0;
     state.Date = new Date().toISOString().slice(0, 10);
     state.idUser = props.match.params.id;
@@ -104,9 +119,10 @@ export default function SpendingNew(props) {
     }
 
     await api.request(API_TYPES.SPENDINGS).create("/AddSpending/", state);
-
+    setOpen(true);
+    clearFields();
+    // setRefresh(!refresh);
   }
-
 
   return (
     <div>
@@ -129,14 +145,15 @@ export default function SpendingNew(props) {
                     required
                     fullWidth="true"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
-                    inputProps={{
-                    }}
+                    inputProps={{}}
                   >
                     <option aria-label="None" value="" />
                     {cars.map((car, key) => (
-                      <option key={key} value={car.idCar}>{car.model}</option>
+                      <option key={key} value={car.idCar}>
+                        {car.model}
+                      </option>
                     ))}
                   </Select>
                 </GridItem>
@@ -150,17 +167,18 @@ export default function SpendingNew(props) {
                     fullWidth="true"
                     required
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
-                    inputProps={{
-                    }}
+                    inputProps={{}}
                   >
                     <option aria-label="None" value="" />
-                    {costs.filter(x => x.idCosts != 99).map((cost, key) => (
-                      <option key={key} value={cost.idCosts}>{cost.description}</option>
-                    ))}
-
-
+                    {costs
+                      .filter((x) => x.idCosts != 99)
+                      .map((cost, key) => (
+                        <option key={key} value={cost.idCosts}>
+                          {cost.description}
+                        </option>
+                      ))}
                   </Select>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={5}>
@@ -168,19 +186,21 @@ export default function SpendingNew(props) {
                     labelText="Enter price"
                     id="price"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
                       onChange: handleChange,
                       value: state.price,
-                      type: "number"
+                      type: "number",
                     }}
                   />
                 </GridItem>
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary" onClick={SendData}>Dodaj wydatek</Button>
+              <Button color="primary" onClick={SendData}>
+                Dodaj wydatek
+              </Button>
             </CardFooter>
           </Card>
         </GridItem>
@@ -205,14 +225,15 @@ export default function SpendingNew(props) {
                     required
                     fullWidth="true"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
-                    inputProps={{
-                    }}
+                    inputProps={{}}
                   >
                     <option aria-label="None" value="" />
                     {cars.map((car, key) => (
-                      <option key={key} value={car.idCar}>{car.model}</option>
+                      <option key={key} value={car.idCar}>
+                        {car.model}
+                      </option>
                     ))}
                   </Select>
                 </GridItem>
@@ -222,23 +243,31 @@ export default function SpendingNew(props) {
                     labelText="Enter km"
                     id="km"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
                       onChange: handleChangeKm,
                       value: stateKm.km,
-                      type: "number"
+                      type: "number",
                     }}
                   />
                 </GridItem>
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary" onClick={SendData}>Dodaj przebieg</Button>
+              <Button color="primary" onClick={SendData}>
+                Dodaj przebieg
+              </Button>
             </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
+      <Modal
+        open={open}
+        onChange={handleClose}
+        txt={"OK"}
+        title={"Zaktualizowano"}
+      />
     </div>
   );
 }
