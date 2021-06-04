@@ -15,7 +15,6 @@ const LogoutButton = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     history.push("/");
-
   }
 
   return (

@@ -18,7 +18,8 @@ const useStyles = makeStyles(styles);
 export default function Sidebar(props) {
 
   let userId =  localStorage.getItem('userId');
-  
+  console.log(userId);
+
   const classes = useStyles();
   function activeRoute(routeName) {
     return window.location.href.indexOf(routeName) > -1 ? true : false;
